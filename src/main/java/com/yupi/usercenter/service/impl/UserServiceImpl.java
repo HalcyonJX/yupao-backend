@@ -17,7 +17,9 @@ import org.springframework.util.DigestUtils;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -203,6 +205,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         if(CollectionUtils.isEmpty(tagNameList)){
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
+        //SQL查询版本
 //        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
 //        //拼接tag
 //        //like '%Java%' and like '%Python%'
@@ -222,6 +225,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
                 return false;
             }
             Set<String> tempTagNameSet =  gson.fromJson(tagstr,new TypeToken<Set<String>>(){}.getType());
+            //java8 Optional来判断空
+            tempTagNameSet = Optional.ofNullable(tempTagNameSet).orElse(new HashSet<>());
             for (String tagName : tagNameList){
                 if (!tempTagNameSet.contains(tagName)){
                     return false;
