@@ -221,9 +221,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         //2.判断内存中是否包含要求的标签
         return userList.stream().filter(user -> {
             String tagstr = user.getTags();
-            if (StringUtils.isBlank(tagstr)){
-                return false;
-            }
             Set<String> tempTagNameSet =  gson.fromJson(tagstr,new TypeToken<Set<String>>(){}.getType());
             //java8 Optional来判断空
             tempTagNameSet = Optional.ofNullable(tempTagNameSet).orElse(new HashSet<>());
